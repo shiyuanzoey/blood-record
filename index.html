@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>血象记录</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --blue:#1769ff;
+  --bg:#f4f6f8;
+  --text:#15171c;
+  --gray:#8d929b;
+}
+
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+}
+
+button,input{font-family:inherit}
+
+.app{
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  padding:
+    max(52px,env(safe-area-inset-top))
+    20px
+    calc(100px + env(safe-area-inset-bottom));
+}
+
+.small{
+  color:var(--gray);
+  font-size:14px;
+}
+
+h1{
+  margin:6px 0;
+  font-size:30px;
+  letter-spacing:-1px;
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:700;
+  margin:28px 0 14px;
+}
+
+/* 今日卡片 */
+
+.cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.card{
+  background:white;
+  border-radius:22px;
+  padding:19px;
+  min-height:145px;
+  box-shadow:0 5px 25px rgba(0,0,0,.035);
+}
+
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+}
+
+.card-name{
+  font-weight:650;
+  font-size:15px;
+}
+
+.abbr{
+  color:#a1a6ae;
+  font-size:12px;
+}
+
+.value{
+  font-size:34px;
+  font-weight:750;
+  margin-top:25px;
+  letter-spacing:-1px;
+}
+
+.empty{color:#c3c7cd}
+
+.unit{
+  color:#9ba0a9;
+  font-size:11px;
+  margin-top:3px;
+}
+
+/* 趋势 */
+
+.trend{
+  background:white;
+  border-radius:24px;
+  padding:20px 16px 18px;
+  margin-top:28px;
+  box-shadow:0 5px 25px rgba(0,0,0,.035);
+}
+
+.trend-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  padding:0 4px;
+}
+
+.trend-title{
+  font-weight:700;
+  font-size:18px;
+}
+
+.range-button{
+  border:0;
+  background:#f2f3f5;
+  border-radius:12px;
+  padding:7px 10px;
+  color:#666b73;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.metric-tabs{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+  background:#f4f5f7;
+  border-radius:14px;
+  padding:4px;
+  margin-top:18px;
+}
+
+.tab{
+  border:0;
+  background:transparent;
+  color:#8b9098;
+  border-radius:11px;
+  padding:9px 2px;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.tab.active{
+  background:white;
+  color:var(--blue);
+  font-weight:650;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.range-tabs{
+  display:flex;
+  gap:7px;
+  margin-top:12px;
+}
+
+.range-tab{
+  flex:1;
+  border:0;
+  background:#f6f7f9;
+  color:#8b9098;
+  padding:8px;
+  border-radius:10px;
+  font-size:11px;
+  cursor:pointer;
+}
+
+.range-tab.active{
+  background:#eaf1ff;
+  color:var(--blue);
+  font-weight:650;
+}
+
+.chart-wrap{
+  margin-top:12px;
+  width:100%;
+  overflow:hidden;
+}
+
+#trendChart{
+  width:100%;
+  height:220px;
+  display:block;
+}
+
+.chart-empty{
+  height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#a4a9b1;
+  font-size:13px;
+  line-height:1.7;
+}
+
+/* 按钮 */
+
+.main-button{
+  width:100%;
+  border:0;
+  background:var(--blue);
+  color:white;
+  padding:17px;
+  border-radius:17px;
+  margin-top:22px;
+  font-size:16px;
+  font-weight:650;
+  cursor:pointer;
+}
+
+/* 历史 */
+
+.history{
+  margin-top:28px;
+}
+
+.history-item{
+  background:white;
+  border-radius:20px;
+  padding:17px;
+  margin-bottom:11px;
+}
+
+.history-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.history-date{
+  font-weight:700;
+  font-size:15px;
+}
+
+.history-data{
+  color:#737881;
+  font-size:12px;
+  line-height:1.9;
+  margin-top:9px;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  margin-top:13px;
+  padding-top:12px;
+  border-top:1px solid #f0f1f3;
+}
+
+.action-btn{
+  flex:1;
+  border:0;
+  padding:10px;
+  border-radius:11px;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.edit-btn{
+  background:#eef4ff;
+  color:var(--blue);
+}
+
+.delete-btn{
+  background:#fff1f1;
+  color:#d94b4b;
+}
+
+/* 录入页 */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:var(--bg);
+  z-index:20;
+  display:none;
+  overflow:auto;
+}
+
+.modal.show{display:block}
+
+.form-page{
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  padding:
+    max(55px,env(safe-area-inset-top))
+    20px
+    calc(60px + env(safe-area-inset-bottom));
+}
+
+.back{
+  border:0;
+  background:white;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.form-title{
+  font-size:29px;
+  margin:24px 0 5px;
+}
+
+.form-subtitle{
+  color:#9297a0;
+  font-size:14px;
+  margin-bottom:28px;
+}
+
+.form-card{
+  background:white;
+  padding:5px 20px;
+  border-radius:24px;
+}
+
+.input-row{
+  padding:18px 0;
+  border-bottom:1px solid #f0f1f3;
+}
+
+.input-row:last-child{border-bottom:0}
+
+.label{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+  font-size:14px;
+  font-weight:600;
+}
+
+.label span{
+  color:#9ca1a9;
+  font-size:12px;
+  font-weight:400;
+}
+
+input{
+  width:100%;
+  border:0;
+  outline:none;
+  background:#f6f7f9;
+  border-radius:14px;
+  padding:15px;
+  font-size:20px;
+}
+
+input[type="date"]{
+  font-size:16px;
+}
+
+.tip{
+  color:#9a9fa7;
+  font-size:12px;
+  line-height:1.7;
+  padding:16px 4px;
+}
+
+@media(max-width:360px){
+  .app{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .card{
+    padding:16px;
+  }
+
+  .value{
+    font-size:30px;
+  }
+
+  .card-name{
+    font-size:14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="small">血象管理</div>
+  <h1>今日血象</h1>
+  <div class="small" id="todayText"></div>
+
+  <div class="section-title">今日指标</div>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-name">白细胞</div>
+        <div class="abbr">WBC</div>
+      </div>
+      <div class="value empty" id="wbcValue">--</div>
+      <div class="unit">×10⁹/L</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-name">血红蛋白</div>
+        <div class="abbr">HGB</div>
+      </div>
+      <div class="value empty" id="hgbValue">--</div>
+      <div class="unit">g/L</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-name">血小板</div>
+        <div class="abbr">PLT</div>
+      </div>
+      <div class="value empty" id="pltValue">--</div>
+      <div class="unit">×10⁹/L</div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-name">中性粒绝对值</div>
+        <div class="abbr">ANC</div>
+      </div>
+      <div class="value empty" id="ancValue">--</div>
+      <div class="unit">×10⁹/L</div>
+    </div>
+
+  </div>
+
+
+  <div class="trend">
+
+    <div class="trend-header">
+      <div>
+        <div class="trend-title">血象趋势</div>
+        <div class="small"
+             id="chartName"
+             style="margin-top:5px">
+          白细胞 WBC
+        </div>
+      </div>
+
+      <button class="range-button"
+              id="rangeLabel">
+        最近7天
+      </button>
+    </div>
+
+
+    <div class="metric-tabs">
+
+      <button class="tab active"
+              onclick="changeMetric('wbc',this)">
+        白细胞
+      </button>
+
+      <button class="tab"
+              onclick="changeMetric('hgb',this)">
+        血红蛋白
+      </button>
+
+      <button class="tab"
+              onclick="changeMetric('plt',this)">
+        血小板
+      </button>
+
+      <button class="tab"
+              onclick="changeMetric('anc',this)">
+        中性粒
+      </button>
+
+    </div>
+
+
+    <div class="range-tabs">
+
+      <button class="range-tab active"
+              onclick="changeRange(7,this)">
+        7天
+      </button>
+
+      <button class="range-tab"
+              onclick="changeRange(14,this)">
+        14天
+      </button>
+
+      <button class="range-tab"
+              onclick="changeRange(30,this)">
+        30天
+      </button>
+
+    </div>
+
+
+    <div class="chart-wrap"
+         id="chartContainer">
+    </div>
+
+  </div>
+
+
+  <button class="main-button"
+          onclick="openNewRecord()">
+    ＋ 记录今日血象
+  </button>
+
+
+  <div class="history">
+
+    <div class="section-title">
+      历史记录
+    </div>
+
+    <div id="historyList"></div>
+
+  </div>
+
+</div>
+
+
+<!-- 录入/编辑页面 -->
+
+<div class="modal" id="recordModal">
+
+  <div class="form-page">
+
+    <button class="back"
+            onclick="closeForm()">
+      ‹
+    </button>
+
+    <h2 class="form-title"
+        id="formTitle">
+      记录血象
+    </h2>
+
+    <div class="form-subtitle"
+         id="formSubtitle">
+      按照当天检验报告填写
+    </div>
+
+
+    <div class="form-card">
+
+      <div class="input-row">
+        <div class="label">日期</div>
+        <input type="date"
+               id="recordDate">
+      </div>
+
+
+      <div class="input-row">
+
+        <div class="label">
+          白细胞 WBC
+          <span>×10⁹/L</span>
+        </div>
+
+        <input type="number"
+               inputmode="decimal"
+               step="0.01"
+               id="wbc"
+               placeholder="例如 3.21">
+
+      </div>
+
+
+      <div class="input-row">
+
+        <div class="label">
+          血红蛋白 HGB
+          <span>g/L</span>
+        </div>
+
+        <input type="number"
+               inputmode="decimal"
+               step="1"
+               id="hgb"
+               placeholder="例如 86">
+
+      </div>
+
+
+      <div class="input-row">
+
+        <div class="label">
+          血小板 PLT
+          <span>×10⁹/L</span>
+        </div>
+
+        <input type="number"
+               inputmode="decimal"
+               step="1"
+               id="plt"
+               placeholder="例如 42">
+
+      </div>
+
+
+      <div class="input-row">
+
+        <div class="label">
+          中性粒细胞绝对值 ANC
+          <span>×10⁹/L</span>
+        </div>
+
+        <input type="number"
+               inputmode="decimal"
+               step="0.01"
+               id="anc"
+               placeholder="例如 0.82">
+
+      </div>
+
+    </div>
+
+
+    <button class="main-button"
+            id="saveButton"
+            onclick="saveRecord()">
+      保存血象记录
+    </button>
+
+
+    <div class="tip">
+      请按照实际检验报告填写。本工具主要用于记录和查看数据变化，
+      不能替代医生的诊断或治疗建议。
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+let currentMetric = "wbc";
+let currentRange = 7;
+let editingOriginalDate = null;
+
+
+const metricInfo = {
+
+  wbc:{
+    name:"白细胞 WBC",
+    unit:"×10⁹/L"
+  },
+
+  hgb:{
+    name:"血红蛋白 HGB",
+    unit:"g/L"
+  },
+
+  plt:{
+    name:"血小板 PLT",
+    unit:"×10⁹/L"
+  },
+
+  anc:{
+    name:"中性粒细胞绝对值 ANC",
+    unit:"×10⁹/L"
+  }
+
+};
+
+
+const today = new Date();
+
+
+function localDateString(date){
+
+  const y = date.getFullYear();
+
+  const m =
+    String(date.getMonth()+1)
+    .padStart(2,"0");
+
+  const d =
+    String(date.getDate())
+    .padStart(2,"0");
+
+  return `${y}-${m}-${d}`;
+}
+
+
+const todayString =
+  localDateString(today);
+
+
+document.getElementById("todayText")
+.innerText =
+`${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日`;
+
+
+
+function getRecords(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem("bloodRecords")
+      || "[]"
+    );
+
+  }catch{
+
+    return [];
+
+  }
+
+}
+
+
+function saveRecords(records){
+
+  localStorage.setItem(
+    "bloodRecords",
+    JSON.stringify(records)
+  );
+
+}
+
+
+/* 新增 */
+
+function openNewRecord(){
+
+  editingOriginalDate = null;
+
+  clearInputs();
+
+  document.getElementById("recordDate")
+  .value = todayString;
+
+  document.getElementById("formTitle")
+  .innerText = "记录血象";
+
+  document.getElementById("formSubtitle")
+  .innerText = "按照当天检验报告填写";
+
+  document.getElementById("saveButton")
+  .innerText = "保存血象记录";
+
+  openForm();
+
+}
+
+
+/* 编辑 */
+
+function editRecord(date){
+
+  const records = getRecords();
+
+  const record =
+    records.find(r => r.date === date);
+
+  if(!record) return;
+
+
+  editingOriginalDate = date;
+
+
+  document.getElementById("recordDate")
+  .value = record.date;
+
+  document.getElementById("wbc")
+  .value = record.wbc;
+
+  document.getElementById("hgb")
+  .value = record.hgb;
+
+  document.getElementById("plt")
+  .value = record.plt;
+
+  document.getElementById("anc")
+  .value = record.anc;
+
+
+  document.getElementById("formTitle")
+  .innerText = "编辑血象";
+
+  document.getElementById("formSubtitle")
+  .innerText =
+  `正在修改 ${formatFullDate(record.date)} 的记录`;
+
+  document.getElementById("saveButton")
+  .innerText = "保存修改";
+
+  openForm();
+
+}
+
+
+/* 删除 */
+
+function deleteRecord(date){
+
+  const yes = confirm(
+    `确定删除 ${formatFullDate(date)} 的血象记录吗？`
+  );
+
+  if(!yes) return;
+
+
+  let records = getRecords();
+
+  records =
+    records.filter(r => r.date !== date);
+
+  saveRecords(records);
+
+  render();
+
+}
+
+
+/* 保存 */
+
+function saveRecord(){
+
+  const date =
+    document.getElementById("recordDate").value;
+
+  const wbc =
+    document.getElementById("wbc").value;
+
+  const hgb =
+    document.getElementById("hgb").value;
+
+  const plt =
+    document.getElementById("plt").value;
+
+  const anc =
+    document.getElementById("anc").value;
+
+
+  if(!date){
+
+    alert("请选择日期");
+
+    return;
+
+  }
+
+
+  if(
+    wbc === "" ||
+    hgb === "" ||
+    plt === "" ||
+    anc === ""
+  ){
+
+    alert("请把四项数据填写完整");
+
+    return;
+
+  }
+
+
+  let records = getRecords();
+
+
+  /* 编辑时先移除原来的日期 */
+
+  if(editingOriginalDate){
+
+    records =
+      records.filter(
+        r => r.date !== editingOriginalDate
+      );
+
+  }
+
+
+  const record = {
+
+    date:date,
+
+    wbc:Number(wbc),
+
+    hgb:Number(hgb),
+
+    plt:Number(plt),
+
+    anc:Number(anc)
+
+  };
+
+
+  /* 如果目标日期已经存在，则覆盖 */
+
+  const existingIndex =
+    records.findIndex(
+      r => r.date === date
+    );
+
+
+  if(existingIndex >= 0){
+
+    records[existingIndex] = record;
+
+  }else{
+
+    records.push(record);
+
+  }
+
+
+  records.sort(
+    (a,b) =>
+    a.date.localeCompare(b.date)
+  );
+
+
+  saveRecords(records);
+
+
+  editingOriginalDate = null;
+
+  clearInputs();
+
+  closeForm();
+
+  render();
+
+}
+
+
+function openForm(){
+
+  document.getElementById("recordModal")
+  .classList.add("show");
+
+  document.body.style.overflow = "hidden";
+
+}
+
+
+function closeForm(){
+
+  document.getElementById("recordModal")
+  .classList.remove("show");
+
+  document.body.style.overflow = "";
+
+  editingOriginalDate = null;
+
+}
+
+
+function clearInputs(){
+
+  document.getElementById("recordDate")
+  .value = todayString;
+
+  document.getElementById("wbc")
+  .value = "";
+
+  document.getElementById("hgb")
+  .value = "";
+
+  document.getElementById("plt")
+  .value = "";
+
+  document.getElementById("anc")
+  .value = "";
+
+}
+
+
+/* 首页 */
+
+function setValue(id,value){
+
+  const el =
+    document.getElementById(id);
+
+
+  if(value !== undefined){
+
+    el.innerText = value;
+
+    el.classList.remove("empty");
+
+  }else{
+
+    el.innerText = "--";
+
+    el.classList.add("empty");
+
+  }
+
+}
+
+
+function render(){
+
+  const records = getRecords();
+
+
+  const todayRecord =
+    records.find(
+      r => r.date === todayString
+    );
+
+
+  setValue(
+    "wbcValue",
+    todayRecord?.wbc
+  );
+
+  setValue(
+    "hgbValue",
+    todayRecord?.hgb
+  );
+
+  setValue(
+    "pltValue",
+    todayRecord?.plt
+  );
+
+  setValue(
+    "ancValue",
+    todayRecord?.anc
+  );
+
+
+  renderHistory(records);
+
+  renderChart(records);
+
+}
+
+
+/* 历史 */
+
+function renderHistory(records){
+
+  const list =
+    document.getElementById("historyList");
+
+
+  if(records.length === 0){
+
+    list.innerHTML =
+    `<div class="small">
+      还没有血象记录
+    </div>`;
+
+    return;
+
+  }
+
+
+  const data =
+    [...records].reverse();
+
+
+  list.innerHTML =
+    data.map(r => `
+
+      <div class="history-item">
+
+        <div class="history-top">
+
+          <div class="history-date">
+            ${formatFullDate(r.date)}
+          </div>
+
+          <div class="abbr">
+            血常规
+          </div>
+
+        </div>
+
+
+        <div class="history-data">
+
+          WBC ${r.wbc} ×10⁹/L　
+          HGB ${r.hgb} g/L
+
+          <br>
+
+          PLT ${r.plt} ×10⁹/L　
+          ANC ${r.anc} ×10⁹/L
+
+        </div>
+
+
+        <div class="actions">
+
+          <button
+            class="action-btn edit-btn"
+            onclick="editRecord('${r.date}')">
+
+            编辑
+
+          </button>
+
+
+          <button
+            class="action-btn delete-btn"
+            onclick="deleteRecord('${r.date}')">
+
+            删除
+
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+function formatFullDate(date){
+
+  const [y,m,d] =
+    date.split("-");
+
+  return `${y}年${Number(m)}月${Number(d)}日`;
+
+}
+
+
+/* 指标切换 */
+
+function changeMetric(metric,button){
+
+  currentMetric = metric;
+
+
+  document.querySelectorAll(".tab")
+  .forEach(
+    el => el.classList.remove("active")
+  );
+
+
+  button.classList.add("active");
+
+
+  document.getElementById("chartName")
+  .innerText =
+  metricInfo[metric].name;
+
+
+  renderChart(
+    getRecords()
+  );
+
+}
+
+
+/* 7 / 14 / 30 天 */
+
+function changeRange(days,button){
+
+  currentRange = days;
+
+
+  document.querySelectorAll(".range-tab")
+  .forEach(
+    el => el.classList.remove("active")
+  );
+
+
+  button.classList.add("active");
+
+
+  document.getElementById("rangeLabel")
+  .innerText =
+  `最近${days}天`;
+
+
+  renderChart(
+    getRecords()
+  );
+
+}
+
+
+/* 过滤指定天数 */
+
+function recordsInRange(records,days){
+
+  if(records.length === 0)
+    return [];
+
+
+  const endDate =
+    new Date(todayString + "T00:00:00");
+
+
+  const startDate =
+    new Date(endDate);
+
+
+  startDate.setDate(
+    startDate.getDate() - days + 1
+  );
+
+
+  return records.filter(r => {
+
+    const d =
+      new Date(r.date + "T00:00:00");
+
+    return (
+      d >= startDate &&
+      d <= endDate
+    );
+
+  });
+
+}
+
+
+/* 趋势图 */
+
+function renderChart(records){
+
+  const container =
+    document.getElementById(
+      "chartContainer"
+    );
+
+
+  const data =
+    recordsInRange(
+      records,
+      currentRange
+    );
+
+
+  if(data.length < 2){
+
+    container.innerHTML = `
+
+      <div class="chart-empty">
+
+        最近 ${currentRange} 天内至少需要 2 条记录
+        <br>
+        才能显示变化趋势
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const values =
+    data.map(
+      r => Number(r[currentMetric])
+    );
+
+
+  const width = 370;
+  const height = 220;
+
+  const paddingLeft = 32;
+  const paddingRight = 16;
+  const paddingTop = 35;
+  const paddingBottom = 42;
+
+
+  let min =
+    Math.min(...values);
+
+  let max =
+    Math.max(...values);
+
+
+  if(min === max){
+
+    const offset =
+      min === 0
+      ? 1
+      : Math.abs(min) * 0.2;
+
+    min -= offset;
+    max += offset;
+
+  }else{
+
+    const range = max-min;
+
+    min =
+      Math.max(
+        0,
+        min-range*0.2
+      );
+
+    max =
+      max+range*0.2;
+
+  }
+
+
+  function getX(index){
+
+    if(data.length === 1)
+      return width/2;
+
+
+    return paddingLeft +
+      index *
+      (
+        (width-paddingLeft-paddingRight)
+        /
+        (data.length-1)
+      );
+
+  }
+
+
+  function getY(value){
+
+    const chartHeight =
+      height -
+      paddingTop -
+      paddingBottom;
+
+
+    return paddingTop +
+      (max-value) /
+      (max-min) *
+      chartHeight;
+
+  }
+
+
+  const points =
+    values.map(
+      (value,index) =>
+      `${getX(index)},${getY(value)}`
+    ).join(" ");
+
+
+  let grid = "";
+
+
+  for(let i=0;i<3;i++){
+
+    const y =
+      paddingTop +
+      i *
+      (
+        (height-paddingTop-paddingBottom)
+        /2
+      );
+
+
+    grid += `
+
+      <line
+        x1="${paddingLeft}"
+        y1="${y}"
+        x2="${width-paddingRight}"
+        y2="${y}"
+        stroke="#eef0f3"
+        stroke-width="1"
+      />
+
+    `;
+
+  }
+
+
+  let dots = "";
+
+
+  data.forEach(
+    (item,index) => {
+
+      const x =
+        getX(index);
+
+      const y =
+        getY(values[index]);
+
+
+      const parts =
+        item.date.split("-");
+
+
+      const dateLabel =
+        `${Number(parts[1])}/${Number(parts[2])}`;
+
+
+      /*
+        记录较多时，
+        不把每一天日期全部写出来，
+        避免手机屏幕挤在一起。
+      */
+
+      let showDate = true;
+
+
+      if(data.length > 8){
+
+        const step =
+          Math.ceil(
+            data.length / 6
+          );
+
+        showDate =
+          index % step === 0 ||
+          index === data.length-1;
+
+      }
+
+
+      dots += `
+
+        <circle
+          cx="${x}"
+          cy="${y}"
+          r="4.5"
+          fill="#1769ff"
+          stroke="white"
+          stroke-width="2.5"
+        />
+
+
+        ${
+          data.length <= 14
+          ?
+          `
+          <text
+            x="${x}"
+            y="${y-11}"
+            text-anchor="middle"
+            font-size="10"
+            font-weight="600"
+            fill="#4f5660">
+
+            ${values[index]}
+
+          </text>
+          `
+          :
+          ""
+        }
+
+
+        ${
+          showDate
+          ?
+          `
+          <text
+            x="${x}"
+            y="${height-13}"
+            text-anchor="middle"
+            font-size="9.5"
+            fill="#a0a5ad">
+
+            ${dateLabel}
+
+          </text>
+          `
+          :
+          ""
+        }
+
+      `;
+
+    }
+  );
+
+
+  container.innerHTML = `
+
+    <svg
+      id="trendChart"
+      viewBox="0 0 ${width} ${height}"
+      preserveAspectRatio="none">
+
+      ${grid}
+
+      <polyline
+        points="${points}"
+        fill="none"
+        stroke="#1769ff"
+        stroke-width="4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        vector-effect="non-scaling-stroke"
+      />
+
+      ${dots}
+
+    </svg>
+
+  `;
+
+}
+
+
+render();
+
+</script>
+
+</body>
+</html>
