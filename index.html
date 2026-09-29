@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="血象记录">
 <title>血象记录</title>
 
 <style>
@@ -31,10 +32,7 @@ button,input{font-family:inherit}
   max-width:430px;
   min-height:100vh;
   margin:auto;
-  padding:
-    max(52px,env(safe-area-inset-top))
-    20px
-    calc(100px + env(safe-area-inset-bottom));
+  padding:max(52px,env(safe-area-inset-top)) 20px calc(100px + env(safe-area-inset-bottom));
 }
 
 .small{
@@ -54,7 +52,7 @@ h1{
   margin:28px 0 14px;
 }
 
-/* 今日卡片 */
+/* 今日数据 */
 
 .cards{
   display:grid;
@@ -63,7 +61,7 @@ h1{
 }
 
 .card{
-  background:white;
+  background:#fff;
   border-radius:22px;
   padding:19px;
   min-height:145px;
@@ -74,7 +72,6 @@ h1{
   display:flex;
   justify-content:space-between;
   gap:8px;
-  align-items:center;
 }
 
 .card-name{
@@ -105,7 +102,7 @@ h1{
 /* 趋势 */
 
 .trend{
-  background:white;
+  background:#fff;
   border-radius:24px;
   padding:20px 16px 18px;
   margin-top:28px;
@@ -124,14 +121,12 @@ h1{
   font-size:18px;
 }
 
-.range-button{
-  border:0;
+.range-label{
   background:#f2f3f5;
   border-radius:12px;
   padding:7px 10px;
   color:#666b73;
   font-size:12px;
-  cursor:pointer;
 }
 
 .metric-tabs{
@@ -151,11 +146,10 @@ h1{
   border-radius:11px;
   padding:9px 2px;
   font-size:12px;
-  cursor:pointer;
 }
 
 .tab.active{
-  background:white;
+  background:#fff;
   color:var(--blue);
   font-weight:650;
   box-shadow:0 2px 8px rgba(0,0,0,.06);
@@ -175,7 +169,6 @@ h1{
   padding:8px;
   border-radius:10px;
   font-size:11px;
-  cursor:pointer;
 }
 
 .range-tab.active{
@@ -207,19 +200,18 @@ h1{
   line-height:1.7;
 }
 
-/* 按钮 */
+/* 主按钮 */
 
 .main-button{
   width:100%;
   border:0;
   background:var(--blue);
-  color:white;
+  color:#fff;
   padding:17px;
   border-radius:17px;
   margin-top:22px;
   font-size:16px;
   font-weight:650;
-  cursor:pointer;
 }
 
 /* 历史 */
@@ -229,7 +221,7 @@ h1{
 }
 
 .history-item{
-  background:white;
+  background:#fff;
   border-radius:20px;
   padding:17px;
   margin-bottom:11px;
@@ -237,9 +229,7 @@ h1{
 
 .history-top{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:10px;
 }
 
 .history-date{
@@ -267,7 +257,6 @@ h1{
   border:0;
   padding:10px;
   border-radius:11px;
-  cursor:pointer;
   font-size:13px;
 }
 
@@ -279,6 +268,52 @@ h1{
 .delete-btn{
   background:#fff1f1;
   color:#d94b4b;
+}
+
+/* 数据管理 */
+
+.data-box{
+  background:#fff;
+  border-radius:22px;
+  padding:18px;
+  margin-top:12px;
+}
+
+.data-title{
+  font-size:15px;
+  font-weight:700;
+}
+
+.data-description{
+  color:#969ba3;
+  font-size:12px;
+  line-height:1.6;
+  margin-top:5px;
+}
+
+.data-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:15px;
+}
+
+.data-btn{
+  border:0;
+  border-radius:13px;
+  padding:13px 5px;
+  font-size:13px;
+  font-weight:600;
+}
+
+.export-btn{
+  background:#eef4ff;
+  color:var(--blue);
+}
+
+.import-btn{
+  background:#f1f2f4;
+  color:#555b64;
 }
 
 /* 录入页 */
@@ -298,20 +333,16 @@ h1{
   max-width:430px;
   min-height:100vh;
   margin:auto;
-  padding:
-    max(55px,env(safe-area-inset-top))
-    20px
-    calc(60px + env(safe-area-inset-bottom));
+  padding:max(55px,env(safe-area-inset-top)) 20px calc(60px + env(safe-area-inset-bottom));
 }
 
 .back{
   border:0;
-  background:white;
+  background:#fff;
   width:42px;
   height:42px;
   border-radius:50%;
   font-size:22px;
-  cursor:pointer;
 }
 
 .form-title{
@@ -326,7 +357,7 @@ h1{
 }
 
 .form-card{
-  background:white;
+  background:#fff;
   padding:5px 20px;
   border-radius:24px;
 }
@@ -336,7 +367,9 @@ h1{
   border-bottom:1px solid #f0f1f3;
 }
 
-.input-row:last-child{border-bottom:0}
+.input-row:last-child{
+  border-bottom:0;
+}
 
 .label{
   display:flex;
@@ -374,26 +407,22 @@ input[type="date"]{
   padding:16px 4px;
 }
 
+#importFile{
+  display:none;
+}
+
 @media(max-width:360px){
   .app{
     padding-left:14px;
     padding-right:14px;
   }
 
-  .card{
-    padding:16px;
-  }
-
-  .value{
-    font-size:30px;
-  }
-
-  .card-name{
-    font-size:14px;
-  }
+  .card{padding:16px}
+  .value{font-size:30px}
 }
 </style>
 </head>
+
 
 <body>
 
@@ -449,19 +478,18 @@ input[type="date"]{
   <div class="trend">
 
     <div class="trend-header">
+
       <div>
         <div class="trend-title">血象趋势</div>
-        <div class="small"
-             id="chartName"
-             style="margin-top:5px">
+        <div class="small" id="chartName" style="margin-top:5px">
           白细胞 WBC
         </div>
       </div>
 
-      <button class="range-button"
-              id="rangeLabel">
+      <div class="range-label" id="rangeLabel">
         最近7天
-      </button>
+      </div>
+
     </div>
 
 
@@ -509,16 +537,12 @@ input[type="date"]{
 
     </div>
 
-
-    <div class="chart-wrap"
-         id="chartContainer">
-    </div>
+    <div class="chart-wrap" id="chartContainer"></div>
 
   </div>
 
 
-  <button class="main-button"
-          onclick="openNewRecord()">
+  <button class="main-button" onclick="openNewRecord()">
     ＋ 记录今日血象
   </button>
 
@@ -533,27 +557,64 @@ input[type="date"]{
 
   </div>
 
+
+  <div class="section-title">
+    数据管理
+  </div>
+
+  <div class="data-box">
+
+    <div class="data-title">
+      备份与恢复
+    </div>
+
+    <div class="data-description">
+      建议定期导出一份备份。
+      更换手机或需要恢复数据时，可以重新导入。
+    </div>
+
+    <div class="data-buttons">
+
+      <button class="data-btn export-btn"
+              onclick="exportData()">
+        导出备份
+      </button>
+
+      <button class="data-btn import-btn"
+              onclick="chooseImport()">
+        导入备份
+      </button>
+
+    </div>
+
+    <input
+      type="file"
+      id="importFile"
+      accept=".json,application/json"
+      onchange="importData(event)"
+    >
+
+  </div>
+
 </div>
 
 
-<!-- 录入/编辑页面 -->
+
+<!-- 录入 / 编辑 -->
 
 <div class="modal" id="recordModal">
 
   <div class="form-page">
 
-    <button class="back"
-            onclick="closeForm()">
+    <button class="back" onclick="closeForm()">
       ‹
     </button>
 
-    <h2 class="form-title"
-        id="formTitle">
+    <h2 class="form-title" id="formTitle">
       记录血象
     </h2>
 
-    <div class="form-subtitle"
-         id="formSubtitle">
+    <div class="form-subtitle" id="formSubtitle">
       按照当天检验报告填写
     </div>
 
@@ -561,9 +622,13 @@ input[type="date"]{
     <div class="form-card">
 
       <div class="input-row">
-        <div class="label">日期</div>
-        <input type="date"
-               id="recordDate">
+
+        <div class="label">
+          日期
+        </div>
+
+        <input type="date" id="recordDate">
+
       </div>
 
 
@@ -574,11 +639,13 @@ input[type="date"]{
           <span>×10⁹/L</span>
         </div>
 
-        <input type="number"
-               inputmode="decimal"
-               step="0.01"
-               id="wbc"
-               placeholder="例如 3.21">
+        <input
+          type="number"
+          inputmode="decimal"
+          step="0.01"
+          id="wbc"
+          placeholder="例如 3.21"
+        >
 
       </div>
 
@@ -590,11 +657,13 @@ input[type="date"]{
           <span>g/L</span>
         </div>
 
-        <input type="number"
-               inputmode="decimal"
-               step="1"
-               id="hgb"
-               placeholder="例如 86">
+        <input
+          type="number"
+          inputmode="decimal"
+          step="1"
+          id="hgb"
+          placeholder="例如 86"
+        >
 
       </div>
 
@@ -606,11 +675,13 @@ input[type="date"]{
           <span>×10⁹/L</span>
         </div>
 
-        <input type="number"
-               inputmode="decimal"
-               step="1"
-               id="plt"
-               placeholder="例如 42">
+        <input
+          type="number"
+          inputmode="decimal"
+          step="1"
+          id="plt"
+          placeholder="例如 42"
+        >
 
       </div>
 
@@ -622,11 +693,13 @@ input[type="date"]{
           <span>×10⁹/L</span>
         </div>
 
-        <input type="number"
-               inputmode="decimal"
-               step="0.01"
-               id="anc"
-               placeholder="例如 0.82">
+        <input
+          type="number"
+          inputmode="decimal"
+          step="0.01"
+          id="anc"
+          placeholder="例如 0.82"
+        >
 
       </div>
 
@@ -641,13 +714,15 @@ input[type="date"]{
 
 
     <div class="tip">
-      请按照实际检验报告填写。本工具主要用于记录和查看数据变化，
-      不能替代医生的诊断或治疗建议。
+      请按照实际检验报告填写。
+      本工具用于记录和查看数据变化，
+      不用于诊断，也不能替代医生的医疗建议。
     </div>
 
   </div>
 
 </div>
+
 
 
 <script>
@@ -659,25 +734,10 @@ let editingOriginalDate = null;
 
 const metricInfo = {
 
-  wbc:{
-    name:"白细胞 WBC",
-    unit:"×10⁹/L"
-  },
-
-  hgb:{
-    name:"血红蛋白 HGB",
-    unit:"g/L"
-  },
-
-  plt:{
-    name:"血小板 PLT",
-    unit:"×10⁹/L"
-  },
-
-  anc:{
-    name:"中性粒细胞绝对值 ANC",
-    unit:"×10⁹/L"
-  }
+  wbc:{name:"白细胞 WBC"},
+  hgb:{name:"血红蛋白 HGB"},
+  plt:{name:"血小板 PLT"},
+  anc:{name:"中性粒细胞绝对值 ANC"}
 
 };
 
@@ -698,6 +758,7 @@ function localDateString(date){
     .padStart(2,"0");
 
   return `${y}-${m}-${d}`;
+
 }
 
 
@@ -705,8 +766,7 @@ const todayString =
   localDateString(today);
 
 
-document.getElementById("todayText")
-.innerText =
+document.getElementById("todayText").innerText =
 `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日`;
 
 
@@ -715,10 +775,13 @@ function getRecords(){
 
   try{
 
-    return JSON.parse(
-      localStorage.getItem("bloodRecords")
-      || "[]"
-    );
+    const data =
+      JSON.parse(
+        localStorage.getItem("bloodRecords")
+        || "[]"
+      );
+
+    return Array.isArray(data) ? data : [];
 
   }catch{
 
@@ -739,6 +802,7 @@ function saveRecords(records){
 }
 
 
+
 /* 新增 */
 
 function openNewRecord(){
@@ -747,31 +811,32 @@ function openNewRecord(){
 
   clearInputs();
 
-  document.getElementById("recordDate")
-  .value = todayString;
+  document.getElementById("recordDate").value =
+    todayString;
 
-  document.getElementById("formTitle")
-  .innerText = "记录血象";
+  document.getElementById("formTitle").innerText =
+    "记录血象";
 
-  document.getElementById("formSubtitle")
-  .innerText = "按照当天检验报告填写";
+  document.getElementById("formSubtitle").innerText =
+    "按照当天检验报告填写";
 
-  document.getElementById("saveButton")
-  .innerText = "保存血象记录";
+  document.getElementById("saveButton").innerText =
+    "保存血象记录";
 
   openForm();
 
 }
 
 
+
 /* 编辑 */
 
 function editRecord(date){
 
-  const records = getRecords();
-
   const record =
-    records.find(r => r.date === date);
+    getRecords().find(
+      r => r.date === date
+    );
 
   if(!record) return;
 
@@ -779,52 +844,54 @@ function editRecord(date){
   editingOriginalDate = date;
 
 
-  document.getElementById("recordDate")
-  .value = record.date;
+  document.getElementById("recordDate").value =
+    record.date;
 
-  document.getElementById("wbc")
-  .value = record.wbc;
+  document.getElementById("wbc").value =
+    record.wbc;
 
-  document.getElementById("hgb")
-  .value = record.hgb;
+  document.getElementById("hgb").value =
+    record.hgb;
 
-  document.getElementById("plt")
-  .value = record.plt;
+  document.getElementById("plt").value =
+    record.plt;
 
-  document.getElementById("anc")
-  .value = record.anc;
+  document.getElementById("anc").value =
+    record.anc;
 
 
-  document.getElementById("formTitle")
-  .innerText = "编辑血象";
+  document.getElementById("formTitle").innerText =
+    "编辑血象";
 
-  document.getElementById("formSubtitle")
-  .innerText =
-  `正在修改 ${formatFullDate(record.date)} 的记录`;
+  document.getElementById("formSubtitle").innerText =
+    `正在修改 ${formatFullDate(record.date)} 的记录`;
 
-  document.getElementById("saveButton")
-  .innerText = "保存修改";
+  document.getElementById("saveButton").innerText =
+    "保存修改";
 
   openForm();
 
 }
 
 
+
 /* 删除 */
 
 function deleteRecord(date){
 
-  const yes = confirm(
-    `确定删除 ${formatFullDate(date)} 的血象记录吗？`
-  );
+  const yes =
+    confirm(
+      `确定删除 ${formatFullDate(date)} 的血象记录吗？`
+    );
 
   if(!yes) return;
 
 
-  let records = getRecords();
+  const records =
+    getRecords().filter(
+      r => r.date !== date
+    );
 
-  records =
-    records.filter(r => r.date !== date);
 
   saveRecords(records);
 
@@ -833,7 +900,8 @@ function deleteRecord(date){
 }
 
 
-/* 保存 */
+
+/* 保存记录 */
 
 function saveRecord(){
 
@@ -876,10 +944,9 @@ function saveRecord(){
   }
 
 
-  let records = getRecords();
+  let records =
+    getRecords();
 
-
-  /* 编辑时先移除原来的日期 */
 
   if(editingOriginalDate){
 
@@ -893,7 +960,7 @@ function saveRecord(){
 
   const record = {
 
-    date:date,
+    date,
 
     wbc:Number(wbc),
 
@@ -906,17 +973,15 @@ function saveRecord(){
   };
 
 
-  /* 如果目标日期已经存在，则覆盖 */
-
-  const existingIndex =
+  const index =
     records.findIndex(
       r => r.date === date
     );
 
 
-  if(existingIndex >= 0){
+  if(index >= 0){
 
-    records[existingIndex] = record;
+    records[index] = record;
 
   }else{
 
@@ -933,7 +998,6 @@ function saveRecord(){
 
   saveRecords(records);
 
-
   editingOriginalDate = null;
 
   clearInputs();
@@ -945,22 +1009,29 @@ function saveRecord(){
 }
 
 
+
+/* 页面 */
+
 function openForm(){
 
-  document.getElementById("recordModal")
-  .classList.add("show");
+  document
+    .getElementById("recordModal")
+    .classList.add("show");
 
-  document.body.style.overflow = "hidden";
+  document.body.style.overflow =
+    "hidden";
 
 }
 
 
 function closeForm(){
 
-  document.getElementById("recordModal")
-  .classList.remove("show");
+  document
+    .getElementById("recordModal")
+    .classList.remove("show");
 
-  document.body.style.overflow = "";
+  document.body.style.overflow =
+    "";
 
   editingOriginalDate = null;
 
@@ -969,22 +1040,19 @@ function closeForm(){
 
 function clearInputs(){
 
-  document.getElementById("recordDate")
-  .value = todayString;
+  document.getElementById("recordDate").value =
+    todayString;
 
-  document.getElementById("wbc")
-  .value = "";
+  document.getElementById("wbc").value = "";
 
-  document.getElementById("hgb")
-  .value = "";
+  document.getElementById("hgb").value = "";
 
-  document.getElementById("plt")
-  .value = "";
+  document.getElementById("plt").value = "";
 
-  document.getElementById("anc")
-  .value = "";
+  document.getElementById("anc").value = "";
 
 }
+
 
 
 /* 首页 */
@@ -1014,7 +1082,8 @@ function setValue(id,value){
 
 function render(){
 
-  const records = getRecords();
+  const records =
+    getRecords();
 
 
   const todayRecord =
@@ -1051,6 +1120,7 @@ function render(){
 }
 
 
+
 /* 历史 */
 
 function renderHistory(records){
@@ -1062,9 +1132,9 @@ function renderHistory(records){
   if(records.length === 0){
 
     list.innerHTML =
-    `<div class="small">
-      还没有血象记录
-    </div>`;
+      `<div class="small">
+        还没有血象记录
+      </div>`;
 
     return;
 
@@ -1144,7 +1214,8 @@ function formatFullDate(date){
 }
 
 
-/* 指标切换 */
+
+/* 趋势指标 */
 
 function changeMetric(metric,button){
 
@@ -1152,17 +1223,18 @@ function changeMetric(metric,button){
 
 
   document.querySelectorAll(".tab")
-  .forEach(
-    el => el.classList.remove("active")
-  );
+    .forEach(
+      el =>
+      el.classList.remove("active")
+    );
 
 
   button.classList.add("active");
 
 
   document.getElementById("chartName")
-  .innerText =
-  metricInfo[metric].name;
+    .innerText =
+    metricInfo[metric].name;
 
 
   renderChart(
@@ -1172,7 +1244,8 @@ function changeMetric(metric,button){
 }
 
 
-/* 7 / 14 / 30 天 */
+
+/* 时间范围 */
 
 function changeRange(days,button){
 
@@ -1180,17 +1253,18 @@ function changeRange(days,button){
 
 
   document.querySelectorAll(".range-tab")
-  .forEach(
-    el => el.classList.remove("active")
-  );
+    .forEach(
+      el =>
+      el.classList.remove("active")
+    );
 
 
   button.classList.add("active");
 
 
   document.getElementById("rangeLabel")
-  .innerText =
-  `最近${days}天`;
+    .innerText =
+    `最近${days}天`;
 
 
   renderChart(
@@ -1200,16 +1274,12 @@ function changeRange(days,button){
 }
 
 
-/* 过滤指定天数 */
-
 function recordsInRange(records,days){
 
-  if(records.length === 0)
-    return [];
-
-
   const endDate =
-    new Date(todayString + "T00:00:00");
+    new Date(
+      todayString + "T00:00:00"
+    );
 
 
   const startDate =
@@ -1224,7 +1294,10 @@ function recordsInRange(records,days){
   return records.filter(r => {
 
     const d =
-      new Date(r.date + "T00:00:00");
+      new Date(
+        r.date + "T00:00:00"
+      );
+
 
     return (
       d >= startDate &&
@@ -1236,7 +1309,8 @@ function recordsInRange(records,days){
 }
 
 
-/* 趋势图 */
+
+/* 折线图 */
 
 function renderChart(records){
 
@@ -1281,10 +1355,10 @@ function renderChart(records){
   const width = 370;
   const height = 220;
 
-  const paddingLeft = 32;
-  const paddingRight = 16;
-  const paddingTop = 35;
-  const paddingBottom = 42;
+  const left = 32;
+  const right = 16;
+  const top = 35;
+  const bottom = 42;
 
 
   let min =
@@ -1299,14 +1373,16 @@ function renderChart(records){
     const offset =
       min === 0
       ? 1
-      : Math.abs(min) * 0.2;
+      : Math.abs(min)*0.2;
 
     min -= offset;
+
     max += offset;
 
   }else{
 
-    const range = max-min;
+    const range =
+      max-min;
 
     min =
       Math.max(
@@ -1322,14 +1398,10 @@ function renderChart(records){
 
   function getX(index){
 
-    if(data.length === 1)
-      return width/2;
-
-
-    return paddingLeft +
+    return left +
       index *
       (
-        (width-paddingLeft-paddingRight)
+        (width-left-right)
         /
         (data.length-1)
       );
@@ -1339,24 +1411,18 @@ function renderChart(records){
 
   function getY(value){
 
-    const chartHeight =
-      height -
-      paddingTop -
-      paddingBottom;
-
-
-    return paddingTop +
+    return top +
       (max-value) /
       (max-min) *
-      chartHeight;
+      (height-top-bottom);
 
   }
 
 
   const points =
     values.map(
-      (value,index) =>
-      `${getX(index)},${getY(value)}`
+      (v,i) =>
+      `${getX(i)},${getY(v)}`
     ).join(" ");
 
 
@@ -1366,20 +1432,17 @@ function renderChart(records){
   for(let i=0;i<3;i++){
 
     const y =
-      paddingTop +
+      top +
       i *
-      (
-        (height-paddingTop-paddingBottom)
-        /2
-      );
+      ((height-top-bottom)/2);
 
 
     grid += `
 
       <line
-        x1="${paddingLeft}"
+        x1="${left}"
         y1="${y}"
-        x2="${width-paddingRight}"
+        x2="${width-right}"
         y2="${y}"
         stroke="#eef0f3"
         stroke-width="1"
@@ -1411,12 +1474,6 @@ function renderChart(records){
         `${Number(parts[1])}/${Number(parts[2])}`;
 
 
-      /*
-        记录较多时，
-        不把每一天日期全部写出来，
-        避免手机屏幕挤在一起。
-      */
-
       let showDate = true;
 
 
@@ -1424,7 +1481,7 @@ function renderChart(records){
 
         const step =
           Math.ceil(
-            data.length / 6
+            data.length/6
           );
 
         showDate =
@@ -1518,6 +1575,225 @@ function renderChart(records){
   `;
 
 }
+
+
+
+/* ======================
+   导出备份
+====================== */
+
+function exportData(){
+
+  const records =
+    getRecords();
+
+
+  if(records.length === 0){
+
+    alert("目前还没有可以备份的数据");
+
+    return;
+
+  }
+
+
+  const backup = {
+
+    app:"血象记录",
+
+    version:1,
+
+    exportedAt:
+      new Date().toISOString(),
+
+    records:records
+
+  };
+
+
+  const json =
+    JSON.stringify(
+      backup,
+      null,
+      2
+    );
+
+
+  const blob =
+    new Blob(
+      [json],
+      {type:"application/json"}
+    );
+
+
+  const url =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement("a");
+
+
+  a.href = url;
+
+  a.download =
+    `血象记录备份-${todayString}.json`;
+
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+
+  setTimeout(
+    () =>
+    URL.revokeObjectURL(url),
+    1000
+  );
+
+}
+
+
+
+/* ======================
+   导入备份
+====================== */
+
+function chooseImport(){
+
+  document
+    .getElementById("importFile")
+    .click();
+
+}
+
+
+function importData(event){
+
+  const file =
+    event.target.files[0];
+
+
+  if(!file)
+    return;
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(e){
+
+
+      try{
+
+
+        const data =
+          JSON.parse(
+            e.target.result
+          );
+
+
+        if(
+          !data ||
+          !Array.isArray(data.records)
+        ){
+
+          throw new Error();
+
+        }
+
+
+        const valid =
+          data.records.every(
+            r =>
+            typeof r.date === "string" &&
+            Number.isFinite(Number(r.wbc)) &&
+            Number.isFinite(Number(r.hgb)) &&
+            Number.isFinite(Number(r.plt)) &&
+            Number.isFinite(Number(r.anc))
+          );
+
+
+        if(!valid){
+
+          throw new Error();
+
+        }
+
+
+        const yes =
+          confirm(
+            `这个备份中有 ${data.records.length} 条记录。\n\n导入后会替换当前手机里的血象记录。\n\n确定继续吗？`
+          );
+
+
+        if(!yes){
+
+          event.target.value = "";
+
+          return;
+
+        }
+
+
+        const cleanRecords =
+          data.records.map(r => ({
+
+            date:r.date,
+
+            wbc:Number(r.wbc),
+
+            hgb:Number(r.hgb),
+
+            plt:Number(r.plt),
+
+            anc:Number(r.anc)
+
+          }));
+
+
+        cleanRecords.sort(
+          (a,b) =>
+          a.date.localeCompare(b.date)
+        );
+
+
+        saveRecords(
+          cleanRecords
+        );
+
+
+        render();
+
+
+        alert(
+          `恢复成功，共导入 ${cleanRecords.length} 条记录`
+        );
+
+
+      }catch{
+
+
+        alert(
+          "这个文件不是有效的血象记录备份，请重新选择。"
+        );
+
+      }
+
+
+      event.target.value = "";
+
+    };
+
+
+  reader.readAsText(file);
+
+}
+
 
 
 render();
